@@ -3,6 +3,6 @@ High school exams are important in Korea. Many Korean students like to compare t
 
 
 # init setting
-`pip install selenium pandas BeautifulSoup`
+`pip install selenium openpyxl BeautifulSoup`
 
 DownloadLink : https://chromedriver.chromium.org/downloads
