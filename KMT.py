@@ -2,7 +2,7 @@ import io
 import sys
 import time
 import openpyxl
-from openpyxl.styles import Font, Alignment
+from openpyxl.styles import Alignment
 from datetime import datetime
 
 from selenium import webdriver
@@ -18,7 +18,11 @@ now = datetime.now()
 # chrome setting
 _chrome_options = webdriver.ChromeOptions() 
 _chrome_options.add_argument('disable-infobars')
-driver = webdriver.Chrome('C:\chromedriver.exe',options=_chrome_options)
+_chrome_options.add_argument('headless')
+_chrome_options.add_argument("lang=ko_KR")
+_chrome_options.add_argument('--no-sandbox')
+_chrome_options.add_argument('--disable-dev-shm-usage')
+driver = webdriver.Chrome('./chromedriver',options=_chrome_options)
 
 # searching bot
 def search_start(year=(now.year),month=(now.month),_class=3):
@@ -30,7 +34,7 @@ def search_start(year=(now.year),month=(now.month),_class=3):
     sheet = wb.active
     
     fileName = '%d년학도 %02d월 모의고사 등급컷 고등학교 %d학년.xlsx' % (year+1, month, _class)
-    url = 'http://www.ebsi.co.kr/ebs/ent/entd/retrieveTrlNaatLiveGrdCutlnNw2017.ebs?examCd=%dN%02d&type=FULL_SUB&stdntGrd=%d' % (year+1,month,_class)
+    url = 'http://www.ebsi.co.kr/ebs/ent/entd/retrieveTrlNaatLiveGrdCutlnNw2017.ebs?examCd=%dN%02d&type=FULL_SUB&stdntGrd=%d' % (year,month,_class)
     driver.get(url)
     page = 1
     while True:
@@ -136,7 +140,9 @@ def search_start(year=(now.year),month=(now.month),_class=3):
 
 if len(sys.argv) == 1:
     search_start()
+    driver.quit()
 else:
     sys.stdout = io.TextIOWrapper((sys.stdout.detach()), encoding='utf8', newline='')
     sys.stderr = io.TextIOWrapper((sys.stderr.detach()), encoding='utf8', newline='')
     search_start(sys.argv[1],sys.argv[2],sys.argv[3])
+    driver.quit()
